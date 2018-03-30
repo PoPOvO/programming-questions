@@ -40,8 +40,13 @@ int computeNodeValueSum(Linear linear, int start, int count) {
 	int sum = 0;
 	int i = start;
 	
-	while (i < count+start && i < linear.count) {
-		sum += linear.arrays[i++].count;
+	while (i < count+start) {
+		if (i > linear.count-1) {
+			sum += linear.arrays[i-linear.count].count;
+		} else {
+			sum += linear.arrays[i].count;	
+		}
+		i++;
 	}
 	
 	return sum;
@@ -101,6 +106,7 @@ int main(void) {
 		0
 	};
 	Linear *linear = NULL;
+	int i = 0;
 	
 	scanf("%d", &size);                          //学生个数 
 	initLinearList(&linear, size); 
@@ -109,7 +115,11 @@ int main(void) {
 		appendValue(linear, node);
 	}                
 	scanf("%d", &size);                          //选出的学生个数 
-	injectNodeSum(linear, size);
+	injectNodeSum(linear, size);                 //计算每个节点的sum 
+	while (i < linear->count) {
+		printf("%d:%d\n", linear->arrays[i].count, linear->arrays[i].sum);
+		i++;
+	}
 	printf("%d", getMaxSumNode(*linear).sum);    //得到sum最大的一组数据 
 	
 	return 0;
